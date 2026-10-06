@@ -312,7 +312,10 @@ figure{margin:0}
   .hero-media{max-width:560px;padding-bottom:50px}
   .cards{grid-template-columns:repeat(2,1fr);gap:22px}
   .steps{grid-template-columns:repeat(2,1fr);gap:32px}
+  /* Навигация скрыта, а вместе с ней ушёл и её margin-left:auto —
+     без этого кнопка звонка липнет к логотипу вместо правого края. */
   .nav{display:none}
+  .header-cta{margin-left:auto}
   .footer-inner{grid-template-columns:1fr 1fr;gap:32px}
   .footer-brand{grid-column:1 / -1}
 }
