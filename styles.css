@@ -1,0 +1,362 @@
+/* ===== PRINESI CAKE — лендинг ===== */
+
+:root{
+  --green-900:#0B4A26;
+  --green-800:#0F5C2E;
+  --green:#157A35;
+  --green-300:#8FC9A3;
+  --gold:#C9962B;
+  --gold-light:#E8C877;
+  --cream:#FBF8F3;
+  --cream-2:#F4EEE4;
+  --ink:#1C1A17;
+  --muted:#6B6358;
+  --line:#E6DED1;
+  --white:#fff;
+  --r-sm:10px; --r:16px; --r-lg:24px;
+  --shadow:0 2px 4px rgba(28,26,23,.04), 0 12px 32px rgba(28,26,23,.07);
+  --shadow-lg:0 4px 8px rgba(28,26,23,.05), 0 24px 56px rgba(28,26,23,.12);
+  --ease:cubic-bezier(.22,.8,.3,1);
+  --header-h:76px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 16px);-webkit-text-size-adjust:100%}
+/* Lenis управляет скроллом сам — нативный smooth с ним конфликтует */
+html.lenis{scroll-behavior:auto}
+.lenis.lenis-smooth{scroll-behavior:auto}
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:Inter,'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
+  font-size:17px; line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+h1,h2,h3,h4{font-family:'Playfair Display',Georgia,'Times New Roman',serif;font-weight:800;line-height:1.08;margin:0;letter-spacing:-.01em}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+figure{margin:0}
+
+.wrap{width:min(1180px,100% - 48px);margin-inline:auto}
+.center{text-align:center}
+.ico{width:1.15em;height:1.15em;fill:currentColor;flex:none}
+
+.eyebrow{
+  font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+}
+.eyebrow-light{color:var(--gold-light)}
+
+/* ---------- Начальные состояния анимаций ----------
+   Применяются только при живом JS (класс .js ставится в <head>).
+   Без скриптов и при prefers-reduced-motion страница видима целиком. */
+.js .js-intro,
+.js .js-reveal,
+.js .js-card,
+.js .js-step,
+.js .js-split,
+.js .chips li{opacity:0}
+.js .shot{opacity:0}
+
+/* ---------- Полоса прогресса чтения ---------- */
+.scroll-progress{
+  position:fixed;top:0;left:0;height:3px;width:100%;z-index:70;
+  background:linear-gradient(90deg,var(--gold-light),var(--gold));
+  transform:scaleX(0);transform-origin:0 50%;
+  will-change:transform;pointer-events:none;
+}
+
+/* ---------- Кнопки ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:13px 24px;border-radius:999px;border:1.5px solid transparent;
+  font-family:inherit;font-size:16px;font-weight:600;text-decoration:none;
+  cursor:pointer;white-space:nowrap;
+  transition:transform .22s var(--ease),box-shadow .22s var(--ease),background .22s var(--ease),color .22s var(--ease),border-color .22s var(--ease);
+}
+.btn-lg{padding:16px 32px;font-size:17px}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--green);color:var(--white);box-shadow:0 8px 20px rgba(21,122,53,.26)}
+.btn-primary:hover{background:var(--green-800);box-shadow:0 12px 28px rgba(21,122,53,.34)}
+.btn-ghost{background:var(--white);color:var(--green-900);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--green-300);background:var(--cream-2);transform:translateY(-2px)}
+.btn-gold{background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#3B2A05;box-shadow:0 10px 26px rgba(201,150,43,.3)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(201,150,43,.4)}
+.btn-outline-light{background:transparent;color:var(--white);border-color:rgba(255,255,255,.4)}
+.btn-outline-light:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.75);transform:translateY(-2px)}
+/* магнитную кнопку двигает GSAP — свой transition тут мешает */
+.js-magnetic{transition:background .22s var(--ease),box-shadow .22s var(--ease)}
+
+/* ---------- Шапка ---------- */
+.site-header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(251,248,243,.86);backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s,box-shadow .3s,transform .4s var(--ease);
+}
+.site-header.scrolled{border-bottom-color:var(--line);box-shadow:0 4px 20px rgba(28,26,23,.05)}
+.site-header.hidden{transform:translateY(-100%)}
+.header-inner{display:flex;align-items:center;gap:28px;height:var(--header-h)}
+.logo{flex:none;display:flex;text-decoration:none}
+.logo-mark{width:150px;height:36px}
+.nav{display:flex;gap:28px;margin-left:auto;font-size:15.5px;font-weight:500}
+.nav a{position:relative;text-decoration:none;color:var(--muted);padding:4px 0;transition:color .2s}
+.nav a::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px;
+  background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .25s var(--ease);
+}
+.nav a:hover{color:var(--green-900)}
+.nav a:hover::after{transform:scaleX(1)}
+.header-cta{background:var(--green);color:var(--white);padding:11px 20px;font-size:15px}
+.header-cta:hover{background:var(--green-800);transform:translateY(-1px)}
+
+/* ---------- Хиро ---------- */
+.hero{position:relative;padding:72px 0 88px;overflow:hidden}
+.hero::before{
+  content:'';position:absolute;inset:0;z-index:-1;
+  background:
+    radial-gradient(62rem 36rem at 88% -10%, rgba(201,150,43,.14), transparent 62%),
+    radial-gradient(52rem 34rem at 6% 8%, rgba(21,122,53,.10), transparent 60%);
+}
+.hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:64px;align-items:center}
+.hero h1{font-size:clamp(42px,5.6vw,72px);margin-bottom:24px;color:var(--green-900)}
+.hero h1 .dot{color:var(--gold)}
+/* SplitText режет заголовок на строки — им нужен свой слой для 3D-поворота */
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .word{display:inline-block;will-change:transform}
+.lede{font-size:19px;color:var(--muted);max-width:52ch;margin-bottom:34px}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px}
+.center-row{justify-content:center}
+.hero-note{margin-top:22px;font-size:14.5px;color:var(--muted)}
+
+/* Сцена с перспективой: карточки внутри наклоняются по-настоящему */
+.js-tilt-scene{perspective:1200px}
+.js-tilt{transform-style:preserve-3d;will-change:transform}
+
+.hero-media{position:relative;padding-bottom:58px}
+.shot{position:relative;border-radius:var(--r-lg);overflow:hidden;background:var(--white);box-shadow:var(--shadow-lg)}
+.shot img{width:100%;object-fit:cover}
+.shot-main img{aspect-ratio:16/10}
+.shot figcaption{
+  position:absolute;left:0;right:0;bottom:0;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:26px 20px 16px;color:var(--white);font-size:15px;font-weight:500;
+  background:linear-gradient(to top,rgba(11,74,38,.88),rgba(11,74,38,0));
+  transform:translateZ(40px);
+}
+.shot figcaption b{font-size:17px;color:var(--gold-light)}
+/* Правый угол главного фото перекрыт карточкой чизкейка — уводим
+   название и цену влево, чтобы цена не пряталась под ней. */
+.shot-main figcaption{justify-content:flex-start;gap:16px;padding-right:56%}
+.shot-sub{
+  position:absolute;right:-18px;bottom:0;width:56%;
+  border:5px solid var(--cream);border-radius:20px;
+}
+.shot-sub img{aspect-ratio:16/11}
+.shot-sub figcaption{padding:22px 16px 12px;font-size:13.5px}
+.shot-sub figcaption b{font-size:15px}
+
+/* ---------- Полоса доверия ---------- */
+.trust{background:var(--green-900);color:var(--white);padding:34px 0}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.trust-item{display:flex;flex-direction:column;gap:2px}
+.trust-item + .trust-item{border-left:1px solid rgba(255,255,255,.14)}
+.trust-item b{
+  font-family:'Playfair Display',Georgia,serif;font-weight:800;
+  font-size:30px;color:var(--gold-light);line-height:1.2;
+  font-variant-numeric:tabular-nums;           /* счётчик не дёргает ширину */
+}
+.trust-item span{font-size:14px;color:rgba(255,255,255,.72)}
+
+/* ---------- Секции ---------- */
+.section{padding:88px 0}
+.section-tint{background:var(--cream-2)}
+.section-head{max-width:62ch;margin-bottom:48px}
+.section-head h2{font-size:clamp(32px,4vw,48px);color:var(--green-900)}
+.section-lede{margin-top:18px;font-size:18px;color:var(--muted)}
+.section-lede a{color:var(--green);text-decoration-color:rgba(21,122,53,.35);text-underline-offset:3px}
+.section-lede a:hover{color:var(--gold)}
+
+/* ---------- Карточки меню ---------- */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.card{
+  display:flex;flex-direction:column;background:var(--white);
+  border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--shadow);transition:box-shadow .3s var(--ease),border-color .3s;
+}
+.card:hover{box-shadow:var(--shadow-lg);border-color:var(--green-300)}
+.card-img{overflow:hidden;background:var(--cream-2)}
+.card-img img{width:100%;aspect-ratio:16/9;object-fit:cover;transition:transform .5s var(--ease)}
+.card:hover .card-img img{transform:scale(1.05)}
+.card-body{padding:26px 26px 24px;display:flex;flex-direction:column;flex:1;gap:12px}
+.card-body h3{font-size:25px;color:var(--green-900)}
+.card-body p{font-size:15.5px;color:var(--muted)}
+.card-foot{
+  margin-top:auto;padding-top:18px;border-top:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  transform:translateZ(45px);                  /* цена выступает вперёд при наклоне */
+}
+.price{
+  font-family:'Playfair Display',Georgia,serif;font-size:27px;font-weight:800;
+  color:var(--green);display:inline-flex;align-items:baseline;gap:7px;line-height:1;
+}
+.price i{font-family:Inter,sans-serif;font-style:normal;font-size:13px;font-weight:500;color:var(--muted)}
+.link-call{
+  font-size:15px;font-weight:600;color:var(--gold);text-decoration:none;
+  display:inline-flex;align-items:center;gap:5px;transition:gap .2s var(--ease),color .2s;
+}
+.link-call::after{content:'→';font-size:16px}
+.link-call:hover{color:var(--green);gap:9px}
+.card-cta{
+  background:linear-gradient(150deg,var(--green-800),var(--green-900));
+  border-color:transparent;color:var(--white);justify-content:center;
+}
+.card-cta .card-body{gap:16px;padding:34px 30px;flex:1;justify-content:center}
+.card-cta h3{color:var(--white)}
+.card-cta p{color:rgba(255,255,255,.76)}
+.card-cta .btn{align-self:flex-start;margin-top:6px;background:var(--gold-light);color:#3B2A05;box-shadow:none}
+.card-cta .btn:hover{background:var(--white)}
+
+/* ---------- Поводы ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:12px}
+.chips li{
+  padding:11px 22px;border-radius:999px;background:var(--white);
+  border:1px solid var(--line);font-size:16px;font-weight:500;color:var(--green-900);
+  transition:border-color .25s,transform .25s var(--ease),color .25s;
+}
+.chips li:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+
+/* ---------- Бегущая лента работ ---------- */
+.marquee{
+  position:relative;overflow:hidden;padding:4px 0 8px;
+  /* края растворяются, чтобы лента не обрывалась резко */
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+}
+.marquee-track{display:flex;gap:18px;width:max-content;will-change:transform}
+.tile{
+  flex:none;width:260px;border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--shadow);background:var(--white);
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease);
+}
+.tile img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.tile:hover{transform:translateY(-6px) scale(1.02);box-shadow:var(--shadow-lg)}
+#gallery .btn{margin-top:32px}
+
+/* ---------- Шаги ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.steps li{position:relative;padding-top:18px}
+/* Линия прочерчивается при скролле: GSAP гонит --draw от 0 к 1.
+   Без JS переменная не определена и fallback в scaleX() даёт сразу 1. */
+.steps li::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--line);
+  transform:scaleX(var(--draw,1));transform-origin:left;
+}
+.js .steps li::before{transform:scaleX(var(--draw,0))}
+.steps li:hover::before{background:var(--gold)}
+.step-n{
+  display:flex;align-items:center;justify-content:center;width:42px;height:42px;
+  border-radius:50%;background:var(--green);color:var(--white);
+  font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:800;margin-bottom:16px;
+}
+.steps h3{font-size:21px;color:var(--green-900);margin-bottom:8px}
+.steps p{font-size:15.5px;color:var(--muted)}
+.steps a{color:var(--green);font-weight:600;text-decoration-color:rgba(21,122,53,.35);text-underline-offset:3px;white-space:nowrap}
+
+/* ---------- Финальный блок ---------- */
+.final{
+  position:relative;padding:96px 0;text-align:center;color:var(--white);
+  background:linear-gradient(150deg,var(--green-800) 0%,var(--green-900) 60%,#07361B 100%);
+  overflow:hidden;
+}
+.final::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(44rem 26rem at 50% 0%, rgba(232,200,119,.16), transparent 66%);
+}
+.final-inner{position:relative}
+.final h2{font-size:clamp(34px,4.6vw,54px);margin-bottom:18px}
+.final-lede{font-size:19px;color:rgba(255,255,255,.76);max-width:50ch;margin:0 auto 30px}
+.phone-xl{
+  display:inline-block;margin-bottom:32px;text-decoration:none;
+  font-family:'Playfair Display',Georgia,serif;font-size:clamp(30px,4.4vw,50px);font-weight:800;
+  letter-spacing:.01em;transition:transform .25s var(--ease);
+  /* золотой блик бежит по цифрам */
+  background:linear-gradient(100deg,var(--gold-light) 20%,#FFF6DF 45%,var(--gold-light) 70%);
+  background-size:260% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  animation:shine 5s linear infinite;
+}
+.phone-xl:hover{transform:scale(1.02)}
+@keyframes shine{from{background-position:160% 0}to{background-position:-60% 0}}
+
+/* ---------- Подвал ---------- */
+.site-footer{background:#07361B;color:rgba(255,255,255,.66);padding:56px 0 28px;font-size:15px}
+.footer-inner{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px}
+.logo-mark-footer{width:170px;height:41px;margin-bottom:16px}
+.footer-col h4{font-family:Inter,sans-serif;font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light);margin-bottom:14px}
+.footer-col a{display:block;text-decoration:none;padding:5px 0;transition:color .2s}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom{margin-top:44px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);font-size:13.5px;color:rgba(255,255,255,.45)}
+
+/* ---------- Мобильная панель вызова ---------- */
+.call-bar{display:none}
+
+/* ---------- Адаптив ---------- */
+@media (max-width:1000px){
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .hero-media{max-width:560px;padding-bottom:50px}
+  .cards{grid-template-columns:repeat(2,1fr);gap:22px}
+  .steps{grid-template-columns:repeat(2,1fr);gap:32px}
+  .nav{display:none}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:32px}
+  .footer-brand{grid-column:1 / -1}
+}
+@media (max-width:720px){
+  body{font-size:16px}
+  .wrap{width:min(1180px,100% - 32px)}
+  .hero{padding:48px 0 64px}
+  .lede{font-size:17px}
+  .section{padding:64px 0}
+  .section-head{margin-bottom:34px}
+  .cards{grid-template-columns:1fr}
+  .trust-grid{grid-template-columns:repeat(2,1fr);gap:20px 0}
+  .trust-item:nth-child(odd){border-left:none}
+  .trust-item:nth-child(3),.trust-item:nth-child(4){border-top:1px solid rgba(255,255,255,.14);padding-top:20px}
+  .steps{grid-template-columns:1fr;gap:26px}
+  .shot-sub{position:static;width:100%;margin-top:14px;border:none}
+  /* в одну колонку карточки не перекрываются — отступ под чизкейк не нужен */
+  .shot-main figcaption{justify-content:space-between;padding-right:20px}
+  .hero-media{padding-bottom:0}
+  .cta-row .btn{flex:1 1 100%}
+  .tile{width:200px}
+  .footer-inner{grid-template-columns:1fr}
+  .header-cta span{display:none}
+  .header-cta{padding:11px 14px}
+  /* место под плавающую кнопку */
+  .site-footer{padding-bottom:92px}
+  .call-bar{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    position:fixed;left:14px;right:14px;bottom:14px;z-index:60;
+    padding:16px;border-radius:999px;text-decoration:none;
+    background:var(--green);color:var(--white);font-weight:600;font-size:16.5px;
+    box-shadow:0 10px 30px rgba(7,54,27,.4);
+  }
+}
+
+/* ---------- Уважаем системную настройку «меньше движения» ---------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .js .js-intro,.js .js-reveal,.js .js-card,.js .js-step,.js .js-split,.js .chips li,.js .shot{opacity:1}
+  .steps li::before,.js .steps li::before{transform:scaleX(1)}
+  .scroll-progress{display:none}
+  .phone-xl{
+    animation:none;-webkit-text-fill-color:var(--gold-light);color:var(--gold-light);
+    background:none;
+  }
+}

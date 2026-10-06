@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRINESI CAKE — торты на заказ в Душанбе | Доставка</title>
+<meta name="description" content="Торты на заказ, чизкейки, бенто-торты и домашняя выпечка в Душанбе. Ручная работа, свежие десерты к вашей дате. Доставка по городу.">
+<meta property="og:title" content="PRINESI CAKE — торты на заказ в Душанбе">
+<meta property="og:description" content="Ручная работа, свежие торты к вашей дате. Доставка по Душанбе.">
+<meta property="og:type" content="website">
+<!-- Абсолютный URL обязателен: по относительному пути WhatsApp и Telegram
+     не подтянут картинку, и превью ссылки будет пустым. -->
+<meta property="og:url" content="https://sbstudio-lan.github.io/prinesi-cake/">
+<meta property="og:image" content="https://sbstudio-lan.github.io/prinesi-cake/img/rulet.jpg">
+<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="574">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0B4A26">
+<link rel="icon" href="logo.jpg">
+<link rel="preload" as="font" type="font/woff2" href="vendor/fonts/PlayfairDisplay-cyrillic.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="vendor/fonts/Inter-cyrillic.woff2" crossorigin>
+<link rel="stylesheet" href="vendor/fonts.css">
+<link rel="stylesheet" href="styles.css">
+<!-- Ставим флаг до первой отрисовки: начальные состояния анимаций применяются
+     только когда JS жив. Без скриптов страница остаётся полностью видимой. -->
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<div class="scroll-progress" id="progress" aria-hidden="true"></div>
+
+<!-- Переиспользуемый логотип (SVG, чёткий на любом экране) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%"   stop-color="#F2D792"/>
+      <stop offset="38%"  stop-color="#D9A93C"/>
+      <stop offset="62%"  stop-color="#C9962B"/>
+      <stop offset="100%" stop-color="#A87518"/>
+    </linearGradient>
+    <symbol id="logo" viewBox="0 0 208 50">
+      <rect x="3.2" y="3.2" width="43.6" height="43.6" rx="13" fill="#fff" stroke="#157A35" stroke-width="6.4"/>
+      <!-- textLength жёстко вписывает строку в диагональ рамки: без него
+           «PRINESI!» вылезает за зелёный контур на любом кегле. -->
+      <text x="25" y="25" transform="rotate(-35 25 25)" text-anchor="middle" dominant-baseline="central"
+            font-family="Inter, 'Arial Black', Arial, sans-serif" font-weight="800" font-size="11"
+            textLength="43" lengthAdjust="spacingAndGlyphs" fill="#157A35">PRINESI!</text>
+      <text x="58" y="39" font-family="Inter, 'Arial Black', Arial, sans-serif" font-weight="800"
+            font-size="40" letter-spacing="-0.5" fill="url(#goldGrad)">CAKE</text>
+    </symbol>
+    <!-- иконки -->
+    <symbol id="ic-phone" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1l-2.22 2.23Z"/></symbol>
+    <symbol id="ic-ig" viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.17.05 1.8.25 2.23.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.42.37 1.06.42 2.23.06 1.26.07 1.64.07 4.85s0 3.6-.07 4.85c-.05 1.17-.25 1.8-.42 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.17-1.06.37-2.23.42-1.26.06-1.64.07-4.85.07s-3.6 0-4.85-.07c-1.17-.05-1.8-.25-2.23-.42-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.17-.42-.37-1.06-.42-2.23C2.21 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.05-1.17.25-1.8.42-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.17 1.06-.37 2.23-.42C8.4 2.21 8.8 2.2 12 2.2Zm0 1.8c-3.14 0-3.5.01-4.74.07-.9.04-1.38.19-1.7.31-.43.17-.73.37-1.06.69-.32.32-.52.63-.69 1.05-.12.33-.27.81-.31 1.71C3.44 8.87 3.43 9.23 3.43 12s.01 3.13.07 4.37c.4.9.19 1.38.31 1.7.17.43.37.74.69 1.06.33.32.63.52 1.05.69.33.12.81.27 1.71.31 1.24.06 1.6.07 4.74.07s3.5-.01 4.74-.07c.9-.04 1.38-.19 1.7-.31.43-.17.74-.37 1.06-.69.32-.32.52-.63.69-1.05.12-.33.27-.81.31-1.71.06-1.24.07-1.6.07-4.37s-.01-3.13-.07-4.37c-.04-.9-.19-1.38-.31-1.7-.17-.43-.37-.74-.69-1.06a2.85 2.85 0 0 0-1.05-.69c-.33-.12-.81-.27-1.71-.31C15.5 4.01 15.14 4 12 4Zm0 3.05a4.95 4.95 0 1 1 0 9.9 4.95 4.95 0 0 1 0-9.9Zm0 1.8a3.15 3.15 0 1 0 0 6.3 3.15 3.15 0 0 0 0-6.3Zm5.15-3.26a1.16 1.16 0 1 1 0 2.32 1.16 1.16 0 0 1 0-2.32Z"/></symbol>
+  </defs>
+</svg>
+
+<header class="site-header" id="header">
+  <div class="wrap header-inner">
+    <a class="logo" href="#top" aria-label="PRINESI CAKE — на главную">
+      <svg class="logo-mark" viewBox="0 0 208 50" role="img" aria-label="PRINESI CAKE"><use href="#logo"></use></svg>
+    </a>
+    <nav class="nav" aria-label="Основная навигация">
+      <a href="#menu">Торты и цены</a>
+      <a href="#gallery">Работы</a>
+      <a href="#how">Как заказать</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <a class="btn btn-phone header-cta" href="tel:+992000007055">
+      <svg class="ico" aria-hidden="true"><use href="#ic-phone"></use></svg>
+      <span>+992 000 00 70 55</span>
+    </a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ХИРО -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow js-intro">Кондитерская в Душанбе</p>
+        <h1 class="js-split">Торты, которые запоминают<span class="dot">.</span></h1>
+        <p class="lede js-intro">Готовим вручную из свежих продуктов — к вашей дате, с вашей надписью.
+           Дни рождения, свадьбы, бенто-торты и десерты на любой праздник. Доставим по Душанбе.</p>
+        <div class="cta-row js-intro">
+          <a class="btn btn-primary btn-lg js-magnetic" href="tel:+992000007055">
+            <svg class="ico" aria-hidden="true"><use href="#ic-phone"></use></svg>
+            Позвонить и заказать
+          </a>
+          <a class="btn btn-ghost btn-lg" href="https://instagram.com/prinesi_cake" target="_blank" rel="noopener">
+            <svg class="ico" aria-hidden="true"><use href="#ic-ig"></use></svg>
+            Смотреть в Instagram
+          </a>
+        </div>
+        <p class="hero-note js-intro">Отвечаем на звонки с 9:00 до 21:00 · Приём заказов за 1–2 дня до даты</p>
+      </div>
+
+      <div class="hero-media js-tilt-scene">
+        <figure class="shot shot-main js-tilt" data-depth="1">
+          <picture>
+            <source type="image/webp" srcset="img/rulet-540.webp 540w, img/rulet-1080.webp 1080w" sizes="(max-width:1000px) 90vw, 520px">
+            <img src="img/rulet.jpg" alt="Меренговый рулет с клубникой и сливочным кремом" width="1080" height="574" fetchpriority="high">
+          </picture>
+          <figcaption><span>Меренговый рулет</span><b>35 с.</b></figcaption>
+        </figure>
+        <figure class="shot shot-sub js-tilt" data-depth="1.6">
+          <picture>
+            <source type="image/webp" srcset="img/cheesecake-540.webp 540w, img/cheesecake-1080.webp 1080w" sizes="(max-width:1000px) 90vw, 300px">
+            <img src="img/cheesecake.jpg" alt="Чизкейк Лотус с карамелью" width="1080" height="479" loading="lazy">
+          </picture>
+          <figcaption><span>Чизкейк Лотус</span><b>35 с.</b></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ДОВЕРИЕ -->
+  <section class="trust">
+    <div class="wrap trust-grid">
+      <div class="trust-item"><b data-count="4648">4 648</b><span>подписчиков в Instagram</span></div>
+      <div class="trust-item"><b data-count="99">99</b><span>работ в портфолио</span></div>
+      <div class="trust-item"><b data-count="100" data-suffix="%">100%</b><span>ручная работа</span></div>
+      <div class="trust-item"><b>Душанбе</b><span>доставка по городу</span></div>
+    </div>
+  </section>
+
+  <!-- МЕНЮ -->
+  <section class="section" id="menu">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="eyebrow js-reveal">Меню</p>
+        <h2 class="js-reveal">Торты и десерты с ценами</h2>
+        <p class="section-lede js-reveal">Самое популярное из нашей кондитерской. Любой торт делаем под ваш вес,
+           вкус и надпись — точную цену назовём по телефону.</p>
+      </header>
+
+      <div class="cards js-tilt-scene">
+        <article class="card js-card js-tilt">
+          <div class="card-img">
+            <picture>
+              <source type="image/webp" srcset="img/napoleon-540.webp 540w, img/napoleon-1080.webp 1080w" sizes="(max-width:720px) 90vw, (max-width:1000px) 45vw, 350px">
+              <img src="img/napoleon.jpg" alt="Торт Наполеон в разрезе" width="1080" height="429" loading="lazy">
+            </picture>
+          </div>
+          <div class="card-body">
+            <h3>Наполеон</h3>
+            <p>Тончайшие слоёные коржи ручной работы с нежным заварным кремом. Классика, которую просят чаще всего.</p>
+            <div class="card-foot"><span class="price">110 с.<i>за кг</i></span><a class="link-call" href="tel:+992000007055">Заказать</a></div>
+          </div>
+        </article>
+
+        <article class="card js-card js-tilt">
+          <div class="card-img">
+            <picture>
+              <source type="image/webp" srcset="img/cheesecake-540.webp 540w, img/cheesecake-1080.webp 1080w" sizes="(max-width:720px) 90vw, (max-width:1000px) 45vw, 350px">
+              <img src="img/cheesecake.jpg" alt="Чизкейк Лотус с карамельным печеньем" width="1080" height="479" loading="lazy">
+            </picture>
+          </div>
+          <div class="card-body">
+            <h3>Чизкейк Лотус</h3>
+            <p>Нежный чизкейк на песочной основе с карамельным печеньем Lotus и пряной карамелью.</p>
+            <div class="card-foot"><span class="price">35 с.<i>за шт</i></span><a class="link-call" href="tel:+992000007055">Заказать</a></div>
+          </div>
+        </article>
+
+        <article class="card js-card js-tilt">
+          <div class="card-img">
+            <picture>
+              <source type="image/webp" srcset="img/rulet-540.webp 540w, img/rulet-1080.webp 1080w" sizes="(max-width:720px) 90vw, (max-width:1000px) 45vw, 350px">
+              <img src="img/rulet.jpg" alt="Меренговый рулет с клубникой" width="1080" height="574" loading="lazy">
+            </picture>
+          </div>
+          <div class="card-body">
+            <h3>Меренговый рулет</h3>
+            <p>Хрустящая меренга, свежая клубника и воздушный сливочный крем. Лёгкий десерт к чаю и на праздник.</p>
+            <div class="card-foot"><span class="price">35 с.<i>за шт</i></span><a class="link-call" href="tel:+992000007055">Заказать</a></div>
+          </div>
+        </article>
+
+        <article class="card js-card js-tilt">
+          <div class="card-img">
+            <picture>
+              <source type="image/webp" srcset="img/svadebnye-540.webp 540w, img/svadebnye-1080.webp 1080w" sizes="(max-width:720px) 90vw, (max-width:1000px) 45vw, 350px">
+              <img src="img/svadebnye.jpg" alt="Свадебный торт жених и невеста" width="1080" height="484" loading="lazy">
+            </picture>
+          </div>
+          <div class="card-body">
+            <h3>Свадебные торты</h3>
+            <p>Стильные и вкусные торты для вашего особенного дня. Любой ярус, декор и имена молодожёнов.</p>
+            <div class="card-foot"><span class="price">от 180 с.<i>за кг</i></span><a class="link-call" href="tel:+992000007055">Заказать</a></div>
+          </div>
+        </article>
+
+        <article class="card js-card js-tilt">
+          <div class="card-img">
+            <picture>
+              <source type="image/webp" srcset="img/bento-540.webp 540w, img/bento-1080.webp 1080w" sizes="(max-width:720px) 90vw, (max-width:1000px) 45vw, 350px">
+              <img src="img/bento.jpg" alt="Бенто-торты с надписями в коробочках" width="1080" height="463" loading="lazy">
+            </picture>
+          </div>
+          <div class="card-body">
+            <h3>Бенто-торты</h3>
+            <p>Маленький торт в коробочке с вашей надписью — чтобы поздравить без повода или сделать сюрприз.</p>
+            <div class="card-foot"><span class="price">Цена<i>по запросу</i></span><a class="link-call" href="tel:+992000007055">Заказать</a></div>
+          </div>
+        </article>
+
+        <article class="card card-cta js-card">
+          <div class="card-body">
+            <h3>Не нашли нужное?</h3>
+            <p>Печём торты по вашей идее: любой вкус, вес, декор и надпись — в том числе «Зодрӯз муборак».
+               Расскажите, что нужно, и мы соберём торт под ваш праздник.</p>
+            <a class="btn btn-primary" href="tel:+992000007055">
+              <svg class="ico" aria-hidden="true"><use href="#ic-phone"></use></svg>
+              Обсудить заказ
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ПОВОДЫ -->
+  <section class="section section-tint" id="occasions">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="eyebrow js-reveal">Поводы</p>
+        <h2 class="js-reveal">Торт на любой праздник</h2>
+      </header>
+      <ul class="chips">
+        <li>День рождения</li>
+        <li>Свадьба и никох</li>
+        <li>Зодрӯз муборак</li>
+        <li>Детский праздник</li>
+        <li>8 марта</li>
+        <li>23 февраля</li>
+        <li>Корпоратив</li>
+        <li>Годовщина</li>
+        <li>Выписка из роддома</li>
+        <li>Просто так</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ГАЛЕРЕЯ -->
+  <section class="section" id="gallery">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="eyebrow js-reveal">Портфолио</p>
+        <h2 class="js-reveal">Наши работы</h2>
+        <p class="section-lede js-reveal">Каждый торт — ручная работа. Полная лента работ живёт
+           в <a href="https://instagram.com/prinesi_cake" target="_blank" rel="noopener">@prinesi_cake</a>.</p>
+      </header>
+    </div>
+
+    <div class="marquee" id="marquee">
+      <div class="marquee-track">
+        <figure class="tile"><picture><source type="image/webp" srcset="img/g1-540.webp"><img fetchpriority="low" src="img/g1.jpg" alt="Белый торт с шоколадным подтёком и живыми цветами" width="974" height="974"></picture></figure>
+        <figure class="tile"><picture><source type="image/webp" srcset="img/g2-540.webp"><img fetchpriority="low" src="img/g2.jpg" alt="Ярко-розовый торт со свечами и бантом" width="974" height="974"></picture></figure>
+        <figure class="tile"><picture><source type="image/webp" srcset="img/g3-540.webp"><img fetchpriority="low" src="img/g3.jpg" alt="Медовик с ореховой крошкой" width="974" height="974"></picture></figure>
+        <figure class="tile"><picture><source type="image/webp" srcset="img/g4-540.webp"><img fetchpriority="low" src="img/g4.jpg" alt="Торт Sweet Sixteen в венке из цветов" width="974" height="974"></picture></figure>
+        <figure class="tile"><picture><source type="image/webp" srcset="img/g5-540.webp"><img fetchpriority="low" src="img/g5.jpg" alt="Кремовый торт с розовыми цветами" width="974" height="974"></picture></figure>
+        <figure class="tile"><picture><source type="image/webp" srcset="img/g6-540.webp"><img fetchpriority="low" src="img/g6.jpg" alt="Торт с надписью «Зодрӯз муборак» и ромашками" width="974" height="974"></picture></figure>
+        <figure class="tile"><picture><source type="image/webp" srcset="img/g7-540.webp"><img fetchpriority="low" src="img/g7.jpg" alt="Чёрный торт-сердце с золотыми шарами и цифрой 23" width="974" height="974"></picture></figure>
+        <figure class="tile"><picture><source type="image/webp" srcset="img/g8-540.webp"><img fetchpriority="low" src="img/g8.jpg" alt="Торт с бордовыми бантами и надписью «С днём рождения»" width="974" height="974"></picture></figure>
+        <figure class="tile"><picture><source type="image/webp" srcset="img/g9-540.webp"><img fetchpriority="low" src="img/g9.jpg" alt="Чёрный двухъярусный торт с надписью «С днём рождения»" width="974" height="974"></picture></figure>
+        <figure class="tile"><picture><source type="image/webp" srcset="img/g10-540.webp"><img fetchpriority="low" src="img/g10.jpg" alt="Бежевый торт с кактусами и надписью «С днём рождения»" width="974" height="974"></picture></figure>
+      </div>
+    </div>
+
+    <div class="wrap center">
+      <a class="btn btn-ghost js-reveal" href="https://instagram.com/prinesi_cake" target="_blank" rel="noopener">
+        <svg class="ico" aria-hidden="true"><use href="#ic-ig"></use></svg>
+        Открыть @prinesi_cake
+      </a>
+    </div>
+  </section>
+
+  <!-- КАК ЗАКАЗАТЬ -->
+  <section class="section section-tint" id="how">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="eyebrow js-reveal">Всё просто</p>
+        <h2 class="js-reveal">Как заказать торт</h2>
+      </header>
+      <ol class="steps">
+        <li class="js-step"><span class="step-n">1</span><h3>Звоните или пишете</h3>
+          <p>Наберите <a href="tel:+992000007055">+992 000 00 70 55</a> или напишите в Instagram — ответим и подскажем.</p></li>
+        <li class="js-step"><span class="step-n">2</span><h3>Выбираем торт</h3>
+          <p>Подберём вкус, вес, декор и надпись под ваш повод. Назовём точную цену сразу.</p></li>
+        <li class="js-step"><span class="step-n">3</span><h3>Готовим вручную</h3>
+          <p>Печём из свежих продуктов к вашей дате — не держим на складе и не замораживаем.</p></li>
+        <li class="js-step"><span class="step-n">4</span><h3>Привозим</h3>
+          <p>Доставим по Душанбе ко времени праздника в фирменной упаковке.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ФИНАЛЬНЫЙ CTA -->
+  <section class="final" id="contacts">
+    <div class="wrap final-inner">
+      <p class="eyebrow eyebrow-light js-reveal">PRINESI CAKE · Душанбе</p>
+      <h2 class="js-reveal">Какой повод у вас?</h2>
+      <p class="final-lede js-reveal">Позвоните — за пару минут подберём торт, посчитаем цену и договоримся о доставке.</p>
+      <a class="phone-xl js-reveal" href="tel:+992000007055">+992 000 00 70 55</a>
+      <div class="cta-row center-row js-reveal">
+        <a class="btn btn-gold btn-lg js-pulse" href="tel:+992000007055">
+          <svg class="ico" aria-hidden="true"><use href="#ic-phone"></use></svg>
+          Позвонить
+        </a>
+        <a class="btn btn-outline-light btn-lg" href="https://instagram.com/prinesi_cake" target="_blank" rel="noopener">
+          <svg class="ico" aria-hidden="true"><use href="#ic-ig"></use></svg>
+          Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <svg class="logo-mark logo-mark-footer" viewBox="0 0 208 50" role="img" aria-label="PRINESI CAKE"><use href="#logo"></use></svg>
+      <p>Торты на заказ, десерты и выпечка.<br>Доставка по Душанбе.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Контакты</h4>
+      <a href="tel:+992000007055">+992 000 00 70 55</a>
+      <a href="https://instagram.com/prinesi_cake" target="_blank" rel="noopener">@prinesi_cake</a>
+    </div>
+    <div class="footer-col">
+      <h4>Разделы</h4>
+      <a href="#menu">Торты и цены</a>
+      <a href="#gallery">Работы</a>
+      <a href="#how">Как заказать</a>
+    </div>
+  </div>
+  <div class="wrap footer-bottom"><span>© <span id="year">2026</span> PRINESI CAKE · Душанбе</span></div>
+</footer>
+
+<!-- Мобильная панель вызова -->
+<a class="call-bar" href="tel:+992000007055">
+  <svg class="ico" aria-hidden="true"><use href="#ic-phone"></use></svg>
+  Позвонить и заказать торт
+</a>
+
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="vendor/SplitText.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
